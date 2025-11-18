@@ -1,0 +1,260 @@
+[38;2;190;132;255mSQL[0m[38;2;249;38;114m([0m[38;2;230;219;116m1[0m[38;2;249;38;114m)[0m[38;2;248;248;242m                                                                          [0m[38;2;253;151;31mparallel[0m[38;2;248;248;242m                                                                         [0m[38;2;190;132;255mSQL[0m[38;2;249;38;114m([0m[38;2;230;219;116m1[0m[38;2;249;38;114m)[0m
+
+[38;2;253;151;31mNAME[0m
+[38;2;248;248;242m       sql - execute a command on a database determined by a dburl[0m
+
+[38;2;253;151;31mSYNOPSIS[0m
+[38;2;248;248;242m       sql [0m[38;2;248;248;242m[[0m[38;2;248;248;242moptions[0m[38;2;248;248;242m][0m[38;2;248;248;242m dburl [0m[38;2;248;248;242m[[0m[38;2;248;248;242mcommands[0m[38;2;248;248;242m][0m
+
+[38;2;248;248;242m       sql [0m[38;2;248;248;242m[[0m[38;2;248;248;242moptions[0m[38;2;248;248;242m][0m[38;2;248;248;242m dburl < commandfile[0m
+
+[38;2;248;248;242m       #!/usr/bin/sql [0m[38;2;166;226;46m--shebang[0m[38;2;248;248;242m [0m[38;2;248;248;242m[[0m[38;2;248;248;242moptions[0m[38;2;248;248;242m][0m[38;2;248;248;242m dburl[0m
+
+[38;2;253;151;31mDESCRIPTION[0m
+[38;2;248;248;242m       GNU sql aims to give a simple, unified interface for accessing databases through all the different databases' command line clients. So far the focus has been on[0m
+[38;2;248;248;242m       giving a common way to specify login information (protocol, username, password, hostname, and port number), size (database and table size), and running queries.[0m
+
+[38;2;248;248;242m       The database is addressed using a DBURL. If commands are left out you will get that database's interactive shell.[0m
+
+[38;2;248;248;242m       GNU sql is often used in combination with GNU parallel.[0m
+
+[38;2;248;248;242m       dburl    A DBURL has the following syntax: [sql:]vendor:// [[user][:password]@][host][:port]/[database][?sqlquery][0m
+
+[38;2;248;248;242m                See the section DBURL below.[0m
+
+[38;2;248;248;242m       commands The SQL commands to run. Each argument will have a newline appended.[0m
+
+[38;2;248;248;242m                Example: "SELECT * FROM foo;" "SELECT * FROM bar;"[0m
+
+[38;2;248;248;242m                If the arguments contain '\n' or '\x0a' this will be replaced with a newline:[0m
+
+[38;2;248;248;242m                Example: "SELECT * FROM foo;\n SELECT * FROM bar;"[0m
+
+[38;2;248;248;242m                If no commands are given SQL is read from the keyboard or STDIN.[0m
+
+[38;2;248;248;242m                Example: echo 'SELECT * FROM foo;' | sql mysql:///[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--csv[0m[38;2;248;248;242m    CSV output.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--db-size[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--dbsize[0m[38;2;248;248;242m Size of database. Show the size of the database on disk. For Oracle this requires access to read the table dba_data_files - the user system has that.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--help[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m-h[0m[38;2;248;248;242m       Print a summary of the options to GNU sql and exit.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--html[0m[38;2;248;248;242m   HTML output. Turn on HTML tabular output.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--json[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--pretty[0m[38;2;248;248;242m Pretty JSON output.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--list-databases[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--listdbs[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--show-databases[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--showdbs[0m
+[38;2;248;248;242m                List the databases (table spaces) in the database.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--listproc[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--proclist[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--show-processlist[0m
+[38;2;248;248;242m                Show the list of running queries.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--list-tables[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--show-tables[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--table-list[0m
+[38;2;248;248;242m                List the tables in the database.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--noheaders[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--no-headers[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m-n[0m[38;2;248;248;242m       Remove headers and footers and print only tuples. Bug in Oracle: it still prints number of rows found.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m-p[0m[38;2;248;248;242m [0m[38;2;253;151;31mpass-through[0m
+[38;2;248;248;242m                The string following [0m[38;2;166;226;46m-p[0m[38;2;248;248;242m will be given to the database connection program as arguments. Multiple [0m[38;2;166;226;46m-p[0m[38;2;248;248;242m's will be joined with space. Example: pass '[0m[38;2;166;226;46m-U[0m[38;2;248;248;242m' and[0m
+[38;2;248;248;242m                the user name to the program:[0m
+
+[38;2;248;248;242m                [0m[38;2;166;226;46m-p[0m[38;2;248;248;242m "[0m[38;2;166;226;46m-U[0m[38;2;248;248;242m scott" can also be written [0m[38;2;166;226;46m-p[0m[38;2;248;248;242m [0m[38;2;166;226;46m-U[0m[38;2;248;248;242m [0m[38;2;166;226;46m-p[0m[38;2;248;248;242m scott.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--precision[0m[38;2;248;248;242m [0m[38;2;248;248;242m<[0m[38;2;253;151;31mrfc3339[0m[38;2;249;38;114m|[0m[38;2;253;151;31mh[0m[38;2;249;38;114m|[0m[38;2;253;151;31mm[0m[38;2;249;38;114m|[0m[38;2;253;151;31ms[0m[38;2;249;38;114m|[0m[38;2;253;151;31mms[0m[38;2;249;38;114m|[0m[38;2;253;151;31mu[0m[38;2;249;38;114m|[0m[38;2;253;151;31mns[0m[38;2;248;248;242m>[0m
+[38;2;248;248;242m                Precision of timestamps.[0m
+
+[38;2;248;248;242m                Specifiy the format of the output timestamps: rfc3339, h, m, s, ms, u or ns.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m-r[0m[38;2;248;248;242m       Try 3 times. Short version of [0m[38;2;166;226;46m--retries[0m[38;2;248;248;242m 3.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--retries[0m[38;2;248;248;242m [0m[38;2;253;151;31mntimes[0m
+[38;2;248;248;242m                Try ntimes times. If the client program returns with an error, retry the command. Default is [0m[38;2;166;226;46m--retries[0m[38;2;248;248;242m 1.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--sep[0m[38;2;248;248;242m [0m[38;2;253;151;31mstring[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m-s[0m[38;2;248;248;242m [0m[38;2;253;151;31mstring[0m
+[38;2;248;248;242m                Field separator. Use string as separator between columns.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--skip-first-line[0m
+[38;2;248;248;242m                Do not use the first line of input (used by GNU sql itself when called with [0m[38;2;166;226;46m--shebang[0m[38;2;248;248;242m).[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--table-size[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m--tablesize[0m
+[38;2;248;248;242m                Size of tables. Show the size of the tables in the database.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--verbose[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m-v[0m[38;2;248;248;242m       Print which command is sent.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--version[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m-V[0m[38;2;248;248;242m       Print the version GNU sql and exit.[0m
+
+[38;2;248;248;242m       [0m[38;2;166;226;46m--shebang[0m
+[38;2;248;248;242m       [0m[38;2;166;226;46m-Y[0m[38;2;248;248;242m       GNU sql can be called as a shebang (#!) command as the first line of a script. Like this:[0m
+
+[38;2;248;248;242m                  #!/usr/bin/sql [0m[38;2;166;226;46m-Y[0m[38;2;248;248;242m mysql:///[0m
+
+[38;2;248;248;242m                  SELECT * FROM foo;[0m
+
+[38;2;248;248;242m                For this to work [0m[38;2;166;226;46m--shebang[0m[38;2;248;248;242m or [0m[38;2;166;226;46m-Y[0m[38;2;248;248;242m must be set as the first option.[0m
+
+[38;2;253;151;31mDBURL[0m
+[38;2;248;248;242m       A DBURL has the following syntax: [sql:]vendor:// [[user][:password]@][host][:port]/[database][?sqlquery][0m
+
+[38;2;248;248;242m       To quote special characters use %[0m[38;2;166;226;46m-encoding[0m[38;2;248;248;242m specified in http://tools.ietf.org/html/rfc3986#section-2.1 (E.g. a password containing '/' would contain '%2F').[0m
+
+[38;2;248;248;242m       csv:///%2Ftmp%2Fparallel-bug-56096/mytable csv:////tmp/parallel-bug-56096/mytable mysql://me@/me/ mysql:////[0m
+
+[38;2;248;248;242m       sqlite3:///%2Frun%2Fshm%2Fparallel.db sqlite3:///%2Frun%2Fshm%2Fparallel.db/table sqlite:///%2Ftmp%2Ffile.sqlite?SELECT csv:///%2Ftmp%2Fparallel-CSV/OK[0m
+[38;2;248;248;242m       csv:///%2Fmust%2Ffail/fail sqlite3:///%2Frun%2Fshm%2Fparallel.db[0m
+
+[38;2;248;248;242m       Examples:[0m
+
+[38;2;248;248;242m        mysql://scott:tiger@my.example.com/mydb[0m
+[38;2;248;248;242m        influxdb://scott:tiger@influxdb.example.com/foo[0m
+[38;2;248;248;242m        sql:oracle://scott:tiger@ora.example.com/xe[0m
+[38;2;248;248;242m        postgresql://scott:tiger@pg.example.com/pgdb[0m
+[38;2;248;248;242m        pg:///[0m
+[38;2;248;248;242m        postgresqlssl://scott@pg.example.com:3333/pgdb[0m
+[38;2;248;248;242m        sql:sqlite2:////tmp/db.sqlite?SELECT * FROM foo;[0m
+[38;2;248;248;242m        sqlite3:///../db.sqlite3?SELECT%20*%20FROM%20foo;[0m
+
+[38;2;248;248;242m       Currently supported vendors:[0m
+
+[38;2;248;248;242m       • MySQL (mysql) with SSL (mysqls, mysqlssl)[0m
+
+[38;2;248;248;242m       • Oracle (oracle, ora)[0m
+
+[38;2;248;248;242m       • PostgreSQL (postgresql, pg, pgsql, postgres) with SSL (postgresqlssl, pgs, pgsqlssl, postgresssl, pgssl, postgresqls, pgsqls, postgress)[0m
+
+[38;2;248;248;242m       • SQLite2 (sqlite, sqlite2)[0m
+
+[38;2;248;248;242m       • SQLite3 (sqlite3)[0m
+
+[38;2;248;248;242m       • InfluxDB 1.x (influx, influxdb) with SSL (influxdbssl, influxdbs, influxs, influxssl)[0m
+
+[38;2;248;248;242m       Aliases must start with ':' and are read from /etc/sql/aliases and ~/.sql/aliases. The user's own ~/.sql/aliases should only be readable by the user.[0m
+
+[38;2;248;248;242m       Example of aliases:[0m
+
+[38;2;248;248;242m        :myalias1 pg://scott:tiger@pg.example.com/pgdb[0m
+[38;2;248;248;242m        :myalias2 ora://scott:tiger@ora.example.com/xe[0m
+[38;2;248;248;242m        # Short form of mysql://`whoami`:nopassword@localhost:3306/`whoami`[0m
+[38;2;248;248;242m        :myalias3 mysql:///[0m
+[38;2;248;248;242m        # Short form of mysql://`whoami`:nopassword@localhost:33333/mydb[0m
+[38;2;248;248;242m        :myalias4 mysql://:33333/mydb[0m
+[38;2;248;248;242m        # Alias for an alias[0m
+[38;2;248;248;242m        :m      :myalias4[0m
+[38;2;248;248;242m        # the sortest alias possible[0m
+[38;2;248;248;242m        :       sqlite2:////tmp/db.sqlite[0m
+[38;2;248;248;242m        # Including an SQL query[0m
+[38;2;248;248;242m        :query  sqlite:////tmp/db.sqlite?SELECT * FROM foo;[0m
+
+[38;2;253;151;31mEXAMPLES[0m
+[38;2;248;248;242m   Get an interactive prompt[0m
+[38;2;248;248;242m       The most basic use of GNU sql is to get an interactive prompt:[0m
+
+[38;2;248;248;242m       sql sql:oracle://scott:tiger@ora.example.com/xe[0m
+
+[38;2;248;248;242m       If you have setup an alias you can do:[0m
+
+[38;2;248;248;242m       sql :myora[0m
+
+[38;2;248;248;242m   Run a query[0m
+[38;2;248;248;242m       To run a query directly from the command line:[0m
+
+[38;2;248;248;242m       sql :myalias "SELECT * FROM foo;"[0m
+
+[38;2;248;248;242m       Oracle requires newlines after each statement. This can be done like this:[0m
+
+[38;2;248;248;242m       sql :myora "SELECT * FROM foo;" "SELECT * FROM bar;"[0m
+
+[38;2;248;248;242m       Or this:[0m
+
+[38;2;248;248;242m       sql :myora "SELECT * FROM foo;\nSELECT * FROM bar;"[0m
+
+[38;2;248;248;242m   Copy a PostgreSQL database[0m
+[38;2;248;248;242m       To copy a PostgreSQL database use pg_dump to generate the dump and GNU sql to import it:[0m
+
+[38;2;248;248;242m       pg_dump pg_database | sql pg://scott:tiger@pg.example.com/pgdb[0m
+
+[38;2;248;248;242m   Empty all tables in a MySQL database[0m
+[38;2;248;248;242m       Using GNU parallel it is easy to empty all tables without dropping them:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m-n[0m[38;2;248;248;242m mysql:/// 'show tables' | parallel sql mysql:/// DELETE FROM {};[0m
+
+[38;2;248;248;242m   Drop all tables in a PostgreSQL database[0m
+[38;2;248;248;242m       To drop all tables in a PostgreSQL database do:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m-n[0m[38;2;248;248;242m pg:/// '\dt' | parallel [0m[38;2;166;226;46m--colsep[0m[38;2;248;248;242m '\|' [0m[38;2;166;226;46m-r[0m[38;2;248;248;242m sql pg:/// DROP TABLE {2};[0m
+
+[38;2;248;248;242m   Run as a script[0m
+[38;2;248;248;242m       Instead of doing:[0m
+
+[38;2;248;248;242m       sql mysql:/// < sqlfile[0m
+
+[38;2;248;248;242m       you can combine the sqlfile with the DBURL to make a UNIX-script. Create a script called demosql:[0m
+
+[38;2;248;248;242m       #!/usr/bin/sql [0m[38;2;166;226;46m-Y[0m[38;2;248;248;242m mysql:///[0m
+
+[38;2;248;248;242m       SELECT * FROM foo;[0m
+
+[38;2;248;248;242m       Then do:[0m
+
+[38;2;248;248;242m       chmod +x demosql; ./demosql[0m
+
+[38;2;248;248;242m   Use [0m[38;2;166;226;46m--colsep[0m[38;2;248;248;242m to process multiple columns[0m
+[38;2;248;248;242m       Use GNU parallel's [0m[38;2;166;226;46m--colsep[0m[38;2;248;248;242m to separate columns:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m-s[0m[38;2;248;248;242m '\t' :myalias 'SELECT * FROM foo;' | parallel [0m[38;2;166;226;46m--colsep[0m[38;2;248;248;242m '\t' do_stuff {4} {1}[0m
+
+[38;2;248;248;242m   Retry if the connection fails[0m
+[38;2;248;248;242m       If the access to the database fails occasionally [0m[38;2;166;226;46m--retries[0m[38;2;248;248;242m can help make sure the query succeeds:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m--retries[0m[38;2;248;248;242m 5 :myalias 'SELECT * FROM really_big_foo;'[0m
+
+[38;2;248;248;242m   Get info about the running database system[0m
+[38;2;248;248;242m       Show how big the database is:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m--db-size[0m[38;2;248;248;242m :myalias[0m
+
+[38;2;248;248;242m       List the tables:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m--list-tables[0m[38;2;248;248;242m :myalias[0m
+
+[38;2;248;248;242m       List the size of the tables:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m--table-size[0m[38;2;248;248;242m :myalias[0m
+
+[38;2;248;248;242m       List the running processes:[0m
+
+[38;2;248;248;242m       sql [0m[38;2;166;226;46m--show-processlist[0m[38;2;248;248;242m :myalias[0m
+
+[38;2;253;151;31mREPORTING BUGS[0m
+[38;2;248;248;242m       GNU sql is part of GNU parallel. Report bugs to <bug-parallel@gnu.org>.[0m
+
+[38;2;253;151;31mAUTHOR[0m
+[38;2;248;248;242m       When using GNU sql for a publication please cite:[0m
+
+[38;2;248;248;242m       O. Tange (2011): GNU SQL - A Command Line Tool for Accessing Different Databases Using DBURLs, ;login: The USENIX Magazine, April 2011:29-32.[0m
+
+[38;2;248;248;242m       Copyright (C) 2008-2010 Ole Tange http://ole.tange.dk[0m
+
+[38;2;248;248;242m       Copyright (C) 2010-2025 Ole Tange, http://ole.tange.dk and Free Software Foundation, Inc.[0m
+
+[38;2;253;151;31mLICENSE[0m
+[38;2;248;248;242m       This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software[0m
+[38;2;248;248;242m       Foundation; either version 3 of the License, or at your option any later version.[0m
+
+[38;2;248;248;242m       This program is distributed in t
