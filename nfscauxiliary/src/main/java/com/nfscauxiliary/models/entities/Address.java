@@ -13,6 +13,9 @@ public class Address {
     private String uf;
     private String zipCode;
 
+    public Address(String street) {
+        this.street = street;
+    }
     public Address(Integer idAddress, String street, String district, String residence_number, 
                     String city, String state, String uf, String zipCode) {
         this.idAddress = idAddress;
@@ -27,9 +30,14 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address [idAddress=" + idAddress + ", street=" + street + ", district=" + district
-                + ", residence_number=" + residence_number + ", city=" + city + ", state=" + state + ", uf=" + uf
-                + ", zipCode=" + zipCode + "]";
+        return "Address idAddress=" + idAddress 
+                + "\n street = " + street 
+                + "\n district = " + district
+                + "\n residence number = " + residence_number 
+                + "\n city =" + city 
+                + "\n state = " + state 
+                + "\n uf = " + uf
+                + "\n zipCode = " + zipCode + "]";
     }
 
     

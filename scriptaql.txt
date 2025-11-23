@@ -1,0 +1,146 @@
+
+-- SQLite
+--PRAGMA foreign_keys = ON;--
+
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE client (
+	id_client INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT(100) NOT NULL,
+	document_number TEXT(14) NOT NULL,
+	email TEXT(100) NOT NULL,
+	phone_number TEXT(15) NOT NULL,
+	entity_type TEXT(2) NOT NULL
+);
+
+CREATE TABLE service_provider (
+	id_service_provider INTEGER PRIMARY KEY AUTOINCREMENT,
+	legal_name TEXT(100) NOT NULL,
+	cnpj TEXT(14) NOT NULL,
+	email TEXT(100) NOT NULL,
+	phone_number TEXT(15) NOT NULL,
+	municipal_registration TEXT(15),
+	primary_cnae TEXT(7),
+	state_registration TEXT(14)
+);
+
+CREATE TABLE service_master (
+	id_service_master INTEGER PRIMARY KEY AUTOINCREMENT,
+	description TEXT(300) NOT NULL,
+	price NUMBER(15,2) NOT NULL,
+	type TEXT(15) NOT NULL,
+	service_code TEXT(10) NOT NULL
+);
+
+CREATE TABLE material_service (
+	id_material_service INTEGER PRIMARY KEY AUTOINCREMENT,
+	description TEXT(300) NOT NULL,
+	price NUMBER(15,2) NOT NULL,
+	quantity NUMBER (15,6) NOT NULL
+);
+
+CREATE TABLE invoice (
+	id_invoice INTEGER PRIMARY KEY AUTOINCREMENT,
+	issue_date DATE NOT NULL,
+	operation_type TEXT(40) NOT NULL,
+	access_key TEXT(44) NOT NULL,
+	inv_number NUMBER(9) NOT NULL,
+	inv_status TEXT(15) NOT NULL,
+	inv_model TEXT(2) NOT NULL,
+	service_description TEXT(2000) NOT NULL,
+	invoice_pdf_link TEXT(2000) NOT NULL,
+	total_value NUMBER(15,2) NOT NULL,
+	id_client INTEGER,
+	id_service_provider INTEGER,
+
+	CONSTRAINT fk_id_client
+		FOREIGN KEY (id_client)
+			REFERENCES client(id_client)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE,
+
+	CONSTRAINT fk_id_service_provider
+		FOREIGN KEY (id_service_provider)
+			REFERENCES service_provider(id_service_provider)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE
+
+);
+
+CREATE TABLE invoice_cancelled (
+	id_invoice_cancelled INTEGER PRIMARY KEY AUTOINCREMENT,
+	cancellation_reason TEXT(2000) NOT NULL,
+	cancellation_date DATE NOT NULL,
+	id_invoice INTEGER,
+
+	CONSTRAINT fk_id_invoice
+		FOREIGN KEY (id_invoice) REFERENCES invoice(id_invoice)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+
+);
+
+CREATE TABLE address(
+	id_address INTEGER PRIMARY KEY AUTOINCREMENT,
+	street TEXT(100) NOT NULL,
+	district TEXT(40) NOT NULL,
+	residence_num TEXT(10),
+	uf TEXT(2) NOT NULL,
+	zip_code TEXT(8) NOT NULL
+);
+
+CREATE TABLE address_client(
+    ip_client INTEGER NOT NULL,
+    ip_addres INTEGER NOT NULL,
+
+	CONSTRAINT fk_id_client
+		FOREIGN KEY (id_client)
+			REFERENCES client(id_client)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE,
+
+)
+
+CREATE TABLE address_serv(
+    id_service_provider INTEGER NOT NULL,
+    id_address INTEGER NOT NULL,
+
+    CONSTRAINT fk_id_service_provider
+        FOREIGN KEY (id_service_provider)
+            REFERENCES service_provider(id_service_provider)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+
+    CONSTRAINT fk_id_address
+        FOREIGN KEY (id_address)
+            REFERENCES address(id_address)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+)
+
+CREATE TABLE material_list (
+	id_material_list INTEGER PRIMARY KEY AUTOINCREMENT,
+	total_value_materials NUMBER(15,2) NOT NULL,
+	quantity_materials NUMBER(15,6) NOT NULL,
+	id_material_service INTEGER,
+
+	CONSTRAINT fk_id_material_service
+		FOREIGN KEY (id_material_service )
+			REFERENCES material_service(id_material_service )
+				ON DELETE CASCADE
+				ON UPDATE CASCADE
+);
+
+CREATE TABLE service_list (
+	id_service_list INTEGER PRIMARY KEY AUTOINCREMENT,
+	iss_rate REAL NOT NULL,
+	quantity NUMBER(15,6) NOT NULL,
+	total_value_services NUMBER(15,2) NOT NULL,
+	id_service_master INTEGER,
+
+	CONSTRAINT fk_id_service_master
+		FOREIGN KEY (id_service_master)
+			REFERENCES service_master(id_service_master)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE
+);

@@ -8,5 +8,6 @@
             "group": "nfscauxiliary",
             "database": "${workspaceFolder:NFSC_Auxiliary}/auxiliary_db/nfscauxiliarydb/nfscauxiliarydb.db"
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
